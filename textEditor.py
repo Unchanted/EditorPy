@@ -15,7 +15,7 @@ def saveFile():
     f.write(t)
     f.close()
 
-def saveAs();
+def saveAs():
     f = asksaveasfile(mode = 'w', defaultextension = '.txt')
     t = text.get(0.0, END)
     try:
