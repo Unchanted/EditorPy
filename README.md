@@ -31,3 +31,8 @@ git clone https://github.com/Unchanted/EditorPy.git
 cd EditorPy
 pip install -r requirements.txt
 python textEditor.py
+
+
+---
+
+Arcade6
