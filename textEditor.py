@@ -1,50 +1,54 @@
 from tkinter import *
-from tkFileDialog import *
+from tkinter.filedialog import asksaveasfile, askopenfile
+from tkinter.messagebox import showerror
 
-filename = None 
+filename = None
 
-def newFile():
+def new_file():
     global filename
     filename = "Untitled"
-    text.delete(0.0, END)
+    text.delete(1.0, END)
 
-def saveFile():
+def save_file():
     global filename
-    t = text.get(0.0, END)
-    f = open(filename, 'w')
-    f.write(t)
-    f.close()
+    if filename:
+        with open(filename, 'w') as f:
+            f.write(text.get(1.0, END))
+    else:
+        save_as()
 
-def saveAs():
-    f = asksaveasfile(mode = 'w', defaultextension = '.txt')
-    t = text.get(0.0, END)
-    try:
-        f.write(t.rstrip())
-    except:
-        showerror(title = "Oops", message = "Unable to save file..")
+def save_as():
+    global filename
+    f = asksaveasfile(mode='w', defaultextension='.txt')
+    if f:
+        filename = f.name
+        try:
+            with open(filename, 'w') as file:
+                file.write(text.get(1.0, END).rstrip())
+        except Exception as e:
+            showerror(title="Error", message=f"Unable to save file: {e}")
 
-def openFile():
+def open_file():
     f = askopenfile(mode='r')
-    t = f.read()
-    text.delete(0.0, END)
-    text.insert(0.0, t)
+    if f:
+        text.delete(1.0, END)
+        text.insert(1.0, f.read())
 
 root = Tk()
 root.title("Text Editor in Python")
-root.minsize(width=400, height= 400)
-root.maxsize(width=400, height=400)
+root.geometry("400x400")
 
-text = Text(root, width=400, height=400)
-text.pack()
+text = Text(root)
+text.pack(expand=YES, fill=BOTH)
 
 menubar = Menu(root)
-filemenu = Menu(menubar)
-filemenu.add_command(label="New", command=newFile)
-filemenu.add_command(label="Open", command=openFile)
-filemenu.add_command(label="Save", command=saveFile)
-filemenu.add_command(label="Save As...", command=saveAs)
+filemenu = Menu(menubar, tearoff=0)
+filemenu.add_command(label="New", command=new_file)
+filemenu.add_command(label="Open", command=open_file)
+filemenu.add_command(label="Save", command=save_file)
+filemenu.add_command(label="Save As...", command=save_as)
 filemenu.add_separator()
-filemenu.add_command(label="Quit", command= root.quit)
+filemenu.add_command(label="Quit", command=root.quit)
 menubar.add_cascade(label="File", menu=filemenu)
 
 root.config(menu=menubar)
