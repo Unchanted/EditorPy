@@ -29,8 +29,5 @@ To run **EditorPy**, follow these steps:
 ```bash
 git clone https://github.com/Unchanted/EditorPy.git
 cd EditorPy
-`pip install -r requirements.txt`
-
-then run the application by using
-
-`python textEditor.py`
+pip install -r requirements.txt
+python textEditor.py
